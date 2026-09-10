@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkPhase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #F6F1E7;
+    --white: #FFFFFF;
+    --ink: #2B2521;
+    --ink-muted: #6B5C4C;
+    --blue: #1C4A6E;
+    --sand: #C9A876;
+    --terracotta: #B0663F;
+    --amber: #C9752E;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Barlow', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+  }
+
+  .stage {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .eyebrow {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .mark-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .arrow-track {
+    flex: none;
+    width: 220px;
+    height: 30px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 18%, black 82%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 18%, black 82%, transparent);
+  }
+
+  .arrow-strip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 26px;
+    animation: drift 15s linear infinite;
+  }
+
+  .arrow-strip .arrow {
+    flex: none;
+    width: 18px;
+    height: 15px;
+    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+  }
+
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arrow-strip { animation: none; }
+  }
+
+  .stamp {
+    position: relative;
+    padding: 20px 30px 18px;
+    text-align: center;
+  }
+
+  .stamp::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--ink);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    filter: url(#roughen);
+    pointer-events: none;
+  }
+
+  .stamp .word {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 30px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--ink);
+    white-space: nowrap;
+    filter: url(#roughen);
+  }
+
+  .stamp .underline {
+    margin: 7px auto 0;
+    height: 3px;
+    background: var(--amber);
+    filter: url(#roughen);
+  }
+
+  .stamp .subtext {
+    margin-top: 8px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 380px) {
+    .stamp { padding: 16px 18px 14px; }
+    .stamp .word { font-size: 24px; }
+  }
+
+  h1 {
+    margin: 0;
+    text-align: center;
+    text-wrap: balance;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: clamp(22px, 4.2vw, 30px);
+    line-height: 1.25;
+    color: var(--ink);
+    max-width: 20ch;
+  }
+
+  h1 .together { white-space: nowrap; }
+
+  h1 .groundbreaking {
+    display: block;
+    margin-top: 6px;
+  }
+
+  .subline {
+    margin: -12px 0 0;
+    text-align: center;
+    text-wrap: balance;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+    max-width: 34ch;
+    min-height: 3em;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  .subline.is-swapping { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .subline { transition: none; }
+  }
+
+  footer {
+    margin-top: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 420px) {
+    .stage { gap: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="roughen" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" />
+  </filter>
+</svg>
+
+<div class="stage">
+  <div class="eyebrow">Coming soon</div>
+
+  <div class="mark-row">
+    <div class="stamp">
+      <div class="word">WorkPhase</div>
+      <div class="underline"></div>
+      <div class="subtext">Field&nbsp;Management&nbsp;Platform</div>
+    </div>
+    <div class="arrow-track">
+      <div class="arrow-strip">
+        <div class="arrow" style="background:var(--sand)"></div>
+        <div class="arrow" style="background:var(--terracotta)"></div>
+        <div class="arrow" style="background:var(--amber)"></div>
+        <div class="arrow" style="background:var(--blue)"></div>
+        <div class="arrow" style="background:var(--sand)"></div>
+        <div class="arrow" style="background:var(--terracotta)"></div>
+        <div class="arrow" style="background:var(--amber)"></div>
+        <div class="arrow" style="background:var(--blue)"></div>
+      </div>
+    </div>
+  </div>
+
+  <h1>Yet another field<br><span class="together">management platform.</span><span class="groundbreaking">Groundbreaking, we know.</span></h1>
+  <p class="subline" id="subline">The only field assistant you'll actually need.</p>
+
+  <footer>workphase.app</footer>
+</div>
+
+<script>
+  (function () {
+    var statements = [
+      "The only field assistant you'll need — not the fifth app you forgot you installed.",
+      "A schedule you can follow — not one you're constantly rebuilding.",
+      "You'll never hear \"I don't know\" again — someone will finally have the answer.",
+      "No more sticky notes pretending to be a system.",
+      "Your Notes app isn't a CRM — it just really wants to be.",
+      "Your spreadsheet had a good run.",
+      "Built for people who work with their hands — not a mouse.",
+      "\"Where's that job at?\" now has a real answer — not a guess.",
+      "\"It's basically done.\" Now you'll have proof — one way or the other.",
+      "The permit's in the system — not the truck bed.",
+      "Punch lists that don't live on a napkin — or in your head.",
+      "The client says \"one small change.\" Sure they do — and now it's in writing.",
+      "Leave the accounting to QuickBooks — we just plug into it."
+    ];
+    var el = document.getElementById('subline');
+    var i = 0;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function next() {
+      i = (i + 1) % statements.length;
+      if (reduceMotion) {
+        el.textContent = statements[i];
+        return;
+      }
+      el.classList.add('is-swapping');
+      setTimeout(function () {
+        el.textContent = statements[i];
+        el.classList.remove('is-swapping');
+      }, 350);
+    }
+
+    setInterval(next, 3200);
+  })();
+</script>
+
+</body>
+</html>
