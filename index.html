@@ -85,9 +85,13 @@
     clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
   }
 
+  /* Shift rightward (matching the direction the arrows point) by exactly one
+     4-arrow group's width (176px). Starting at -176px and ending at 0 keeps the
+     visible window inside the strip's content the whole time, so the loop
+     never shows a gap or jump. */
   @keyframes drift {
-    from { transform: translateX(0); }
-    to { transform: translateX(-176px); }
+    from { transform: translateX(-176px); }
+    to { transform: translateX(0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -149,14 +153,20 @@
 
   h1 {
     margin: 0;
-    text-align: center;
-    text-wrap: balance;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
     font-family: 'Barlow', sans-serif;
     font-weight: 600;
-    font-size: clamp(20px, 4.6vw, 30px);
+    font-size: clamp(14px, 4vw, 24px);
     line-height: 1.25;
     color: var(--ink);
-    max-width: 32ch;
+    max-width: 94vw;
+  }
+
+  h1 .line {
+    text-align: center;
   }
 
   .subline {
@@ -246,7 +256,10 @@
     </div>
   </div>
 
-  <h1>Yet another field management platform. Groundbreaking, we know.</h1>
+  <h1>
+    <span class="line">Yet another field management platform.</span>
+    <span class="line">Groundbreaking, we know.</span>
+  </h1>
   <p class="subline" id="subline">The only field assistant you'll actually need.</p>
 
   <footer>workphase.app</footer>
